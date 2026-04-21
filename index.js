@@ -61,9 +61,32 @@ function declineBeverage(count) {
 document.querySelector('.order-form').addEventListener('submit', (e) => {
   e.preventDefault();
 
-  const count = document.querySelectorAll('.beverage').length;
+  const beverages = document.querySelectorAll('.beverage');
+  const count = beverages.length;
   const word = declineBeverage(count);
   document.querySelector('.beverage-count-message').textContent = `Вы заказали ${count} ${word}`;
+
+  const tableBody = document.getElementById('order-table-body');
+  tableBody.innerHTML = '';
+
+  beverages.forEach(beverage => {
+    const select = beverage.querySelector('select');
+    const drinkName = select.options[select.selectedIndex].text;
+
+    const milkRadio = beverage.querySelector('input[type="radio"]:checked');
+    const milkName = milkRadio ? milkRadio.nextElementSibling.textContent : '';
+
+    const optionCheckboxes = beverage.querySelectorAll('input[type="checkbox"]:checked');
+    const optionsNames = Array.from(optionCheckboxes).map(cb => cb.nextElementSibling.textContent).join(', ');
+
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${drinkName}</td>
+      <td>${milkName}</td>
+      <td>${optionsNames || '-'}</td>
+    `;
+    tableBody.appendChild(row);
+  });
 
   document.getElementById('order-modal').classList.remove('hidden');
 });
