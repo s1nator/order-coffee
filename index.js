@@ -1,5 +1,21 @@
 let beverageCount = 1;
 
+function updateRemoveButtons() {
+  const forms = document.querySelectorAll('.beverage');
+  const removeButtons = document.querySelectorAll('.remove-button');
+  
+  removeButtons.forEach(btn => {
+    btn.disabled = forms.length === 1;
+  });
+}
+
+function updateBeverageNumbers() {
+  const forms = document.querySelectorAll('.beverage');
+  forms.forEach((form, index) => {
+    form.querySelector('.beverage-count').textContent = `Напиток №${index + 1}`;
+  });
+}
+
 document.querySelector('.add-button').addEventListener('click', () => {
   beverageCount++;
   
@@ -15,4 +31,28 @@ document.querySelector('.add-button').addEventListener('click', () => {
   }
   
   lastForm.after(newForm);
+  updateRemoveButtons();
+  updateBeverageNumbers();
 });
+
+document.querySelector('.order-form').addEventListener('click', (e) => {
+  if (e.target.classList.contains('remove-button')) {
+    const forms = document.querySelectorAll('.beverage');
+    if (forms.length > 1) {
+      e.target.closest('.beverage').remove();
+      updateRemoveButtons();
+      updateBeverageNumbers();
+    }
+  }
+});
+
+document.querySelector('.order-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  document.getElementById('order-modal').classList.remove('hidden');
+});
+
+document.querySelector('.close-modal').addEventListener('click', () => {
+  document.getElementById('order-modal').classList.add('hidden');
+});
+
+updateRemoveButtons();
