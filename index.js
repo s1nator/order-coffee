@@ -111,7 +111,11 @@ document.getElementById('confirm-order-button').addEventListener('click', () => 
   const timeInput = document.getElementById('order-time');
   const selectedTime = timeInput.value;
   
-  if (!selectedTime) return;
+  if (!selectedTime) {
+    timeInput.style.borderColor = 'red';
+    alert('Пожалуйста, выберите время заказа');
+    return;
+  }
 
   const [hours, minutes] = selectedTime.split(':').map(Number);
   const now = new Date();
