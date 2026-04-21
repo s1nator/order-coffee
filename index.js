@@ -30,9 +30,22 @@ document.querySelector('.add-button').addEventListener('click', () => {
     radio.name = `milk${beverageCount}`;
   }
 
+  // Clear inputs and output from cloned form
+  newForm.querySelector('.wishes-input').value = '';
+  newForm.querySelector('.wishes-output').innerHTML = '';
+
   lastForm.after(newForm);
   updateRemoveButtons();
   updateBeverageNumbers();
+});
+
+document.querySelector('.order-form').addEventListener('input', (e) => {
+  if (e.target.classList.contains('wishes-input')) {
+    const text = e.target.value;
+    const regex = /(срочно|быстрее|побыстрее|скорее|поскорее|очень\s+нужно)/gi;
+    const formattedText = text.replace(regex, '<b>$&</b>');
+    e.target.closest('.beverage').querySelector('.wishes-output').innerHTML = formattedText;
+  }
 });
 
 document.querySelector('.order-form').addEventListener('click', (e) => {
@@ -79,16 +92,39 @@ document.querySelector('.order-form').addEventListener('submit', (e) => {
     const optionCheckboxes = beverage.querySelectorAll('input[type="checkbox"]:checked');
     const optionsNames = Array.from(optionCheckboxes).map(cb => cb.nextElementSibling.textContent).join(', ');
 
+    const wishesOutput = beverage.querySelector('.wishes-output').innerHTML;
+
     const row = document.createElement('tr');
     row.innerHTML = `
       <td>${drinkName}</td>
       <td>${milkName}</td>
       <td>${optionsNames || '-'}</td>
+      <td>${wishesOutput || '-'}</td>
     `;
     tableBody.appendChild(row);
   });
 
   document.getElementById('order-modal').classList.remove('hidden');
+});
+
+document.getElementById('confirm-order-button').addEventListener('click', () => {
+  const timeInput = document.getElementById('order-time');
+  const selectedTime = timeInput.value;
+  
+  if (!selectedTime) return;
+
+  const [hours, minutes] = selectedTime.split(':').map(Number);
+  const now = new Date();
+  const currentHours = now.getHours();
+  const currentMinutes = now.getMinutes();
+
+  if (hours < currentHours || (hours === currentHours && minutes < currentMinutes)) {
+    timeInput.style.borderColor = 'red';
+    alert('Мы не умеем перемещаться во времени. Выберите время позже, чем текущее');
+  } else {
+    timeInput.style.borderColor = '';
+    document.getElementById('order-modal').classList.add('hidden');
+  }
 });
 
 document.querySelector('.close-modal').addEventListener('click', () => {

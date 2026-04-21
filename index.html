@@ -56,6 +56,11 @@
         <span>корицу</span>
       </label>
     </div>
+    <div class="field" style="margin-top: 15px;">
+      <span class="label-text" style="width: auto; display: block; margin-bottom: 5px;">И еще вот что</span>
+      <textarea class="wishes-input" rows="3" style="width: 100%; max-width: 400px;"></textarea>
+      <p class="wishes-output" style="margin: 5px 0 0; font-size: 14px; min-height: 20px;"></p>
+    </div>
   </fieldset>
   <div>
     <button type="button" class="add-button">+ Добавить напиток</button>
@@ -77,11 +82,20 @@
           <th>Напиток</th>
           <th>Молоко</th>
           <th>Дополнительно</th>
+          <th>Пожелания</th>
         </tr>
         </thead>
         <tbody id="order-table-body">
         </tbody>
       </table>
+
+      <div style="margin-top: 20px; display: flex; flex-direction: column; align-items: flex-end;">
+        <label style="margin-bottom: 10px;">
+          Выберите время заказа
+          <input type="time" id="order-time" required>
+        </label>
+        <button type="button" class="submit-button" id="confirm-order-button">Оформить</button>
+      </div>
     </div>
   </div>
 </div>
